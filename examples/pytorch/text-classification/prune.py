@@ -27,8 +27,6 @@ class PatchBasedNM(BasePruningMethod):
         bidirection (bool): Whether apply bi-directional pruning.
     """
 
-    EPS = 1e-8
-
     def __init__(
         self, M: int, patch_size: int, candidate_N: List[int], bidirection: bool, **kwargs
     ) -> None:
@@ -52,7 +50,7 @@ class PatchBasedNM(BasePruningMethod):
         """
         # Step 1: Generate the mask from unstructured pruning
         # The scheme utilises this mask to determine N:M pruning settings
-        unstructured_mask = (weight.abs() < self.EPS).int()
+        unstructured_mask = (weight.abs() != 0.).float()
 
         # Step 2: Record the original shape of the weight
         if len(weight.shape) == 4:  # The weight belongs to a 2D-convolution
